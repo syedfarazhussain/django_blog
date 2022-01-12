@@ -1,0 +1,31 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<br>
+{% if messages %}
+<div class="alert alert-success">
+    {% for m in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+    {% endfor %}
+</div>
+{% endif %}
+<br>
+<h1> Post </h2>
+
+<ul>
+{% for post in object_list %}
+    <li><a href="{% url 'article_detail' post.pk %}">{{ post.title }}</a>-- 
+    <a href="{% url 'category_view' post.category|slugify %}">{{ post.category }}</a> -- <p><b> UserName -----> {{ post.author|default_if_none:"Anonymous User"}} {% if post.author.is_staff %}<span class="badge badge-dark">Admin</span>{% endif %}</b> -- {{ post.post_date }} 
+    {% if user.is_authenticated %}
+        {% if request.user == post.author  %}
+            <small>(<a href="{% url 'update_post' post.pk %}"> Edit </a>)</small>
+            <small>(<a href="{% url 'delete_post' post.pk %}"> delete</a>)</small><br/>
+        {% endif %}
+    {% endif %}
+    {{ post.body| slice:":200"|safe }} <a href="{% url 'article_detail' post.pk %}" class="nav-toggle">Read More</a></li>
+    <br/>
+
+{% endfor %}
+</ul>
+
+{% endblock %}

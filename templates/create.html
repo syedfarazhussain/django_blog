@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    <h1> Create Post </h2>
+
+    <br/>
+    <div class="form-group">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.as_p }}
+            <button class="btn btn-secondary">Submit</button>
+        </form>
+    </div>
+    <script>
+        var name = "{{ user.id }}";
+        document.getElementById("elder").value=name;
+    </script>
+{% else %}
+    <p> You can't Create a post because you are not login </p>
+
+{% endif %}
+
+{% endblock %}
